@@ -103,8 +103,7 @@ post_command_cb(struct evhttp_request *req, void *arg) {
     memset(buffer, 0, sz + 1);
     while (evbuffer_get_length(buf)) {
         int n;
-        n = evbuffer_remove(buf, cbuf, sizeof(buf));
-        strcat(buffer, cbuf);
+        n = evbuffer_remove(buf, buffer, sz);
     }
     printf("%s\n", buffer);
 

@@ -27,10 +27,8 @@ int
 main ( int argc, char *argv[] )
 {
     int drc = daemon(0, 1);
-    /*sleep(5);*/
-    task_http_proxy();
 
-    printf("%d\n", drc);
+    task_http_proxy();
 
     return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */

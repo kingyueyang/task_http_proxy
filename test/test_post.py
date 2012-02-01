@@ -16,7 +16,7 @@ import urllib
 def post(url, method, path):
     conn = None
     conn = httplib.HTTPConnection(url)
-    params = 'echo done.\n'
+    params = 'echo done.'
     try:
         conn.request(method, path, params)
     except:
