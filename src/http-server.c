@@ -78,7 +78,6 @@ other_cb(struct evhttp_request *req, void *arg) {
 static void
 post_command_cb(struct evhttp_request *req, void *arg) {
     struct evbuffer *buf;
-    char cbuf[4];
     char *buffer = NULL;
 
     printf("\nArrive /post path\n");
@@ -105,7 +104,12 @@ post_command_cb(struct evhttp_request *req, void *arg) {
         int n;
         n = evbuffer_remove(buf, buffer, sz);
     }
+
     printf("%s\n", buffer);
+/*TODO: exec shell command*/
+    char cmd[] = {"python", "/tmp/echo.py", (char *)0};
+    char *env[] = {};
+    ret = execve("/usr/bin/python", cmd , env);
 
     free(buffer);
     buffer = NULL;
