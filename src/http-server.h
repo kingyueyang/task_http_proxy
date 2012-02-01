@@ -42,6 +42,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include "exec-command.h"
+
 #define	PORT 8888			/* Listening port */
 
 #define	PRINT(x) printf("%d\n", (x))			/* Debug Macro */

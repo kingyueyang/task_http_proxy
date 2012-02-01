@@ -6,13 +6,19 @@ LAB= -levent
 BIN=./bin
 SRC=./src
 
-http-server.o:src/http-server.c
-	${CC} ${FLAGS} -c $< ${SRC}/$@
-
 daemon.o:${SRC}/daemon.c
 	${CC} ${FLAGS} -c $< ${SRC}/$@
 
-task_http_proxy:${SRC}/daemon.o ${SRC}/http-server.o
+http-server.o:${SRC}/http-server.c
+	${CC} ${FLAGS} -c $< ${SRC}/$@
+
+exec-command.o:${SRC}/exec-command.c
+	${CC} ${FLAGS} -c $< ${SRC}/$@
+
+http-server.o:${SRC}/http-server.c
+	${CC} ${FLAGS} -c $< ${SRC}/$@
+
+task_http_proxy:${SRC}/daemon.o ${SRC}/http-server.o ${SRC}/exec-command.o
 	${CC} ${FLAGS} -o ${BIN}/$@ $^ ${LAB}
 
 .PYHON:

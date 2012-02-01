@@ -71,6 +71,7 @@ task_http_proxy(void) {
 static void
 other_cb(struct evhttp_request *req, void *arg) {
     printf("Not Suppost this Path\n");
+    /*log it*/
     evhttp_send_reply(req, 401, "olo", NULL);
     return;
 }
@@ -79,11 +80,12 @@ static void
 post_command_cb(struct evhttp_request *req, void *arg) {
     struct evbuffer *buf;
     char *buffer = NULL;
+    pid_t pid;
 
     printf("\nArrive /post path\n");
     if (EVHTTP_REQ_POST != evhttp_request_get_command(req)) {
-        evhttp_send_reply(req, 500, "not support this method", NULL);
         /*log it*/
+        evhttp_send_reply(req, 500, "not support this method", NULL);
         printf("/post not support this method\n");
         return;
     }
@@ -94,6 +96,7 @@ post_command_cb(struct evhttp_request *req, void *arg) {
 
     buffer = malloc(sz + 1);
     if (NULL == buffer) {
+        /*log it*/
         evhttp_send_reply(req, 500, "alloc memroy error", NULL);
         return ;
     }
@@ -106,14 +109,27 @@ post_command_cb(struct evhttp_request *req, void *arg) {
     }
 
     printf("%s\n", buffer);
-/*TODO: exec shell command*/
-    char cmd[] = {"python", "/tmp/echo.py", (char *)0};
-    char *env[] = {};
-    ret = execve("/usr/bin/python", cmd , env);
+
+    pid = fork();
+    if (pid < 0) {
+        /*log it*/
+        evhttp_send_reply(req, 500, "fork process error", NULL);
+        return;
+    } else if (0 == pid) {
+        /* Childen process*/
+        int execrc = shell_cmd(buffer);
+        if (execrc != 0) {
+            /*TODO: if rc not equ 0, send sms*/
+        }
+    } else {
+        /* Do nothing */
+        ;
+    }
 
     free(buffer);
     buffer = NULL;
 
+    /*log it*/
     evhttp_send_reply(req, 200, "OK", NULL);
     return ;
 }
