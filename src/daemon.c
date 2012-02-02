@@ -24,6 +24,8 @@
 #include "http-server.h"
 #include "log.h"
 
+int task_http_proxy(void);
+
 int
 main ( int argc, char *argv[] )
 {
