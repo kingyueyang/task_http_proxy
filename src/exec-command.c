@@ -25,13 +25,15 @@ shell_cmd (char *buf, int size) {
     char *path = NULL;
 
     path = strsep(&buf, ",");
-    printf("debug:%s\n", path);
-    printf("debug:%s\n", buf);
 
-    char *cmd[] = {"python", "/tmp/echo.py", (char *)0};
+    char *cmd[3] = {"", "", (char *)0};
+    cmd[0] = strsep(&buf, ",");
+    cmd[1] = strsep(&buf, ",");
+
     char *env[] = {};
 
     rc = execve(path, cmd , env);
+    printf("%d\n", rc);
 
     return rc;
 }		/* -----  end of function shell_cmd  ----- */

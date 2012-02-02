@@ -13,11 +13,11 @@
 import httplib
 import urllib
 
-def post(url, method, path):
+def post(url, params):
     conn = None
     conn = httplib.HTTPConnection(url)
-    params = '"/usr/bin/python","python","/tmp/echo.py"'
-    #params = '/usr/bin/python, python'
+    path = '/post'
+    method = 'POST'
     try:
         conn.request(method, path, params)
     except:
@@ -34,12 +34,6 @@ def post(url, method, path):
 
 if __name__ == '__main__':
     print "POST: /post"
-    post('10.10.140.146:8888', 'POST', '/post')
-
-    #print "POST: /get"
-    #post('10.10.140.215:8888', 'POST', '/get')
-    #print "\n"
-
-    #print "GET: /xxx"
-    #post('10.10.140.215:8888', 'GET', '/xxx')
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/echo.py')
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/list.py')
 

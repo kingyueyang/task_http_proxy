@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  exec-command.h
+ *       Filename:  log.c
  *
- *    Description:  parser and exec command form http post
+ *    Description:  simple log
  *
  *        Version:  1.0
- *        Created:  02/01/2012 04:20:02 PM
+ *        Created:  02/01/2012 05:29:59 PM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,10 +16,5 @@
  * =====================================================================================
  */
 
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-int shell_cmd (char *buf, int size);
+#include "log.h"
 

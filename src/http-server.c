@@ -121,6 +121,7 @@ post_command_cb(struct evhttp_request *req, void *arg) {
             buf = NULL;
         }
         if (execrc != 0) {
+            printf("== exit code error\n");
             /*TODO: if rc not equ 0, send sms*/
         }
     } else {
