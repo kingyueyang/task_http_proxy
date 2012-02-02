@@ -20,5 +20,5 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int shell_cmd (char *buf);
+int shell_cmd (char *buf, int size);
 

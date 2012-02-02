@@ -20,16 +20,18 @@
 #include "exec-command.h"
 
 int
-shell_cmd (char *buf)
-{
+shell_cmd (char *buf, int size) {
     int rc;
+    char *path = NULL;
+
+    path = strsep(&buf, ",");
+    printf("debug:%s\n", path);
+    printf("debug:%s\n", buf);
 
     char *cmd[] = {"python", "/tmp/echo.py", (char *)0};
     char *env[] = {};
 
-    free(buf);
-    buf = NULL;
-    rc = execve("/usr/bin/python", cmd , env);
+    rc = execve(path, cmd , env);
 
     return rc;
 }		/* -----  end of function shell_cmd  ----- */

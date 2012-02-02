@@ -15,9 +15,6 @@ http-server.o:${SRC}/http-server.c
 exec-command.o:${SRC}/exec-command.c
 	${CC} ${FLAGS} -c $< ${SRC}/$@
 
-http-server.o:${SRC}/http-server.c
-	${CC} ${FLAGS} -c $< ${SRC}/$@
-
 task_http_proxy:${SRC}/daemon.o ${SRC}/http-server.o ${SRC}/exec-command.o
 	${CC} ${FLAGS} -o ${BIN}/$@ $^ ${LAB}
 

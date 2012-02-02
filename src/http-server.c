@@ -103,10 +103,8 @@ post_command_cb(struct evhttp_request *req, void *arg) {
 
     /* Init temp buffer */
     memset(buffer, 0, sz + 1);
-    while (evbuffer_get_length(buf)) {
-        int n;
-        n = evbuffer_remove(buf, buffer, sz);
-    }
+    int n;
+    n = evbuffer_remove(buf, buffer, sz);
 
     printf("%s\n", buffer);
 
@@ -117,7 +115,11 @@ post_command_cb(struct evhttp_request *req, void *arg) {
         return;
     } else if (0 == pid) {
         /* Childen process*/
-        int execrc = shell_cmd(buffer);
+        int execrc = shell_cmd(buffer, n);
+        if (buf != NULL) {
+            free(buf);
+            buf = NULL;
+        }
         if (execrc != 0) {
             /*TODO: if rc not equ 0, send sms*/
         }

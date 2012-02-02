@@ -16,7 +16,7 @@ import urllib
 def post(url, method, path):
     conn = None
     conn = httplib.HTTPConnection(url)
-    params = 'echo done.'
+    params = '"/usr/bin/python","python","/tmp/echo.py"'
     #params = '/usr/bin/python, python'
     try:
         conn.request(method, path, params)
