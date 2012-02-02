@@ -29,6 +29,7 @@ shell_cmd (char *buf, int size) {
     char *cmd[3] = {"", "", (char *)0};
     cmd[0] = strsep(&buf, ",");
     cmd[1] = strsep(&buf, ",");
+    /*strcpy(NULL, "a");*/
 
     char *env[] = {};
 

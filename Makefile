@@ -15,7 +15,10 @@ http-server.o:${SRC}/http-server.c
 exec-command.o:${SRC}/exec-command.c
 	${CC} ${FLAGS} -c $< ${SRC}/$@
 
-task_http_proxy:${SRC}/daemon.o ${SRC}/http-server.o ${SRC}/exec-command.o
+log.o:${SRC}/log.c
+	${CC} ${FLAGS} -c $< ${SRC}/$@
+
+task_http_proxy:${SRC}/daemon.o ${SRC}/http-server.o ${SRC}/exec-command.o ${SRC}/log.o
 	${CC} ${FLAGS} -o ${BIN}/$@ $^ ${LAB}
 
 .PYHON:

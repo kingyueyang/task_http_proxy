@@ -17,9 +17,14 @@
  */
 
 
+#ifndef _EXEC_COMMAND_H_
+#define _EXEC_COMMAND_H_
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 int shell_cmd (char *buf, int size);
+
+#endif
 

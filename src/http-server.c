@@ -78,6 +78,16 @@ other_cb(struct evhttp_request *req, void *arg) {
 
 static void
 post_command_cb(struct evhttp_request *req, void *arg) {
+    int flag;
+    char *log_path = "/tmp";
+
+    flag = log_open(log_path);
+    if (flag) {
+        return -1;
+    }
+    flag = log_write(2, "debug, %s\n", "post command cb");
+    printf("%d\n", flag);
+
     struct evbuffer *buf;
     char *buffer = NULL;
     pid_t pid;
@@ -121,8 +131,9 @@ post_command_cb(struct evhttp_request *req, void *arg) {
             buf = NULL;
         }
         if (execrc != 0) {
-            printf("== exit code error\n");
             /*TODO: if rc not equ 0, send sms*/
+            /*log it*/
+            return ;
         }
     } else {
         /* Do nothing */
