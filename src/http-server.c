@@ -26,6 +26,16 @@ task_http_proxy(void) {
 
     unsigned short port = PORT;
 
+    int flag;
+    char *log_path = "/tmp";
+
+    flag = log_open(log_path);
+    if (flag) {
+        return -1;
+    }
+
+    log_write(2, "debug, %s\n", "libevent starting...");
+
     /* As you konw */
     if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
         return (1);
@@ -79,12 +89,7 @@ other_cb(struct evhttp_request *req, void *arg) {
 static void
 post_command_cb(struct evhttp_request *req, void *arg) {
     int flag;
-    char *log_path = "/tmp";
 
-    flag = log_open(log_path);
-    if (flag) {
-        return -1;
-    }
     flag = log_write(2, "debug, %s\n", "post command cb");
     printf("%d\n", flag);
 

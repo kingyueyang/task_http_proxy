@@ -24,6 +24,16 @@ shell_cmd (char *buf, int size) {
     int rc;
     char *path = NULL;
 
+    int flag;
+    char *log_path = "/tmp";
+
+    flag = log_open(log_path);
+    if (flag) {
+        return -1;
+    }
+
+    log_write(2, "debug, %s\n", "executed one command.");
+
     path = strsep(&buf, ",");
 
     char *cmd[3] = {"", "", (char *)0};

@@ -43,6 +43,7 @@
 #include <arpa/inet.h>
 
 #include "exec-command.h"
+#include "log.h"
 
 #define	PORT 8888			/* Listening port */
 
