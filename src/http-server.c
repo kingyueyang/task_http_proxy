@@ -43,14 +43,14 @@ task_http_proxy(void) {
     /* Create a new base evObject */
     base = event_base_new();
     if (!base) {
-        fprintf(stderr, "Couldn't create an event_base: exiting\n");
+        log_write(ERROR, "Couldn't create an event_base: exiting\n");
         return 1;
     }
 
     /* Create a new evhttp object to handle requests. */
     http = evhttp_new(base);
     if (!http) {
-        fprintf(stderr, "couldn't create evhttp. Exiting.\n");
+        log_write(ERROR, "Couldn't create evhttp. Exiting.\n");
         return 1;
     }
 
@@ -68,8 +68,7 @@ task_http_proxy(void) {
     handle = evhttp_bind_socket_with_handle(http, "0.0.0.0", port);
 
     if (!handle) {
-        fprintf(stderr, "couldn't bind to port %d. Exiting.\n",
-                (int)port);
+        log_write(ERROR, "Couldn't bind to port %d. Exiting.\n", (int)port);
         return 1;
     }
 
@@ -118,8 +117,6 @@ post_command_cb(struct evhttp_request *req, void *arg) {
     int n;
     n = evbuffer_remove(buf, buffer, sz);
 
-    printf("%s\n", buffer);
-
     pid = fork();
     if (pid < 0) {
         log_write(ERROR, "fork process error.\n");
@@ -145,7 +142,6 @@ post_command_cb(struct evhttp_request *req, void *arg) {
     free(buffer);
     buffer = NULL;
 
-    /*log it*/
     log_write(INFO, "reply 200 OK.\n");
     evhttp_send_reply(req, 200, "OK", NULL);
     return ;
