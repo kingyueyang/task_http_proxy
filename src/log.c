@@ -88,22 +88,3 @@ void log_close(void){
     return ;
 }
 
-
-    /*int*/
-/*main ( int argc, char *argv[] )*/
-/*{*/
-    /*int flag;*/
-    /*char tt[] = "test msg";*/
-    /*char *log_path = "/tmp";*/
-
-    /*flag = log_open(log_path);*/
-    /*printf("%d\n", flag);*/
-
-    /*flag = log_write(2, "debug, %s\n", tt);*/
-    /*printf("%d\n", flag);*/
-
-    /*log_close();*/
-
-    /*return EXIT_SUCCESS;*/
-/*}				[> ----------  end of function main  ---------- <]*/
-
