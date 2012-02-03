@@ -36,13 +36,14 @@ def post(url, params):
 if __name__ == '__main__':
     print "POST: /post"
     import os
-    os.system("cp test_sp1.py /tmp")
-    os.system("cp test_sp2.py /tmp")
-    os.system("mkdir /tmp/test")
+    os.system('cp test_sp1.py /tmp')
+    os.system('cp test_sp2.py /tmp')
+    if (not (os.path.exists('/tmp/test'))):
+        os.system("mkdir /tmp/test")
+
     post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp1.py')
     time.sleep(2)
     post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp2.py')
     time.sleep(2)
     post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp.py')
-    time.sleep(2)
 
