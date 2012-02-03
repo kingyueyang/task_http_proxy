@@ -129,6 +129,7 @@ post_command_cb(struct evhttp_request *req, void *arg) {
         free(buffer);
         buffer = NULL;
 
+/*TODO:send SMS*/
         log_write(INFO, "reply 401 ERR.\n");
         evhttp_send_reply(req, 401, "ERR", NULL);
     }
