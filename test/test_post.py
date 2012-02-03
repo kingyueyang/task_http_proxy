@@ -34,6 +34,10 @@ def post(url, params):
 
 if __name__ == '__main__':
     print "POST: /post"
-    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/echo.py')
-    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/list.py')
+    import os
+    os.system("cp test_sp1.py /tmp")
+    os.system("cp test_sp2.py /tmp")
+    os.system("mkdir /tmp/test")
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp1.py')
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp2.py')
 

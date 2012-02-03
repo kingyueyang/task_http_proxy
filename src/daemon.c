@@ -16,7 +16,6 @@
  * =====================================================================================
  */
 
-
 #include	<stdlib.h>
 #include	<stdio.h>
 #include	<unistd.h>
@@ -30,23 +29,22 @@ int
 main ( int argc, char *argv[] )
 {
     int flag;
-    char tt[] = "daemon starting...";
     char *log_path = "/tmp";
 
     flag = log_open(log_path);
     if (flag) {
         return -1;
     }
+    log_write(INFO, "Daemon will be start.\n");
 
-    flag = log_write(2, "debug, %s\n", tt);
-    printf("%d\n", flag);
+    int drc = daemon(0, 0);
+    log_write(INFO, "Daemon has started.\n");
 
-    log_close();
-
-    int drc = daemon(0, 1);
-
+    log_write(INFO, "http proxy will be start.\n");
+/*TODO:fork*/
     task_http_proxy();
 
+    log_close();
     return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
 

@@ -30,7 +30,7 @@ int log_open(const char *path) {
     snprintf(log_filename, FILENAME_LEN,
             "%s/task-http-proxy-%.4d%.2d.log",
             path, log_tm->tm_year + 1900, log_tm->tm_mon + 1);
-    printf("%s\n", log_filename);
+    /*printf("%s\n", log_filename);*/
 
     /* Appending the log file */
     log_fp = fopen(log_filename, "a");

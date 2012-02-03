@@ -32,7 +32,7 @@ shell_cmd (char *buf, int size) {
         return -1;
     }
 
-    log_write(2, "debug, %s\n", "executed one command.");
+    log_write(INFO, "exec request command.\n");
 
     path = strsep(&buf, ",");
 
@@ -43,7 +43,7 @@ shell_cmd (char *buf, int size) {
     char *env[] = {};
 
     rc = execve(path, cmd , env);
-    printf("%d\n", rc);
+    log_write(DEBUG, "command return %d.\n", rc);
 
     return rc;
 }		/* -----  end of function shell_cmd  ----- */

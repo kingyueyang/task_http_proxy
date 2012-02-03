@@ -34,7 +34,7 @@ task_http_proxy(void) {
         return -1;
     }
 
-    log_write(2, "debug, %s\n", "libevent starting...");
+    log_write(INFO, "http proxy initialize.\n");
 
     /* As you konw */
     if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
@@ -73,6 +73,7 @@ task_http_proxy(void) {
         return 1;
     }
 
+    log_write(INFO, "http proxy initialized done.\n");
     event_base_dispatch(base);
 
     return EXIT_SUCCESS;
@@ -80,8 +81,7 @@ task_http_proxy(void) {
 
 static void
 other_cb(struct evhttp_request *req, void *arg) {
-    printf("Not Suppost this Path\n");
-    /*log it*/
+    log_write(WARN, "Not Suppost this Path\n");
     evhttp_send_reply(req, 401, "olo", NULL);
     return;
 }
@@ -90,28 +90,25 @@ static void
 post_command_cb(struct evhttp_request *req, void *arg) {
     int flag;
 
-    flag = log_write(2, "debug, %s\n", "post command cb");
-    printf("%d\n", flag);
-
     struct evbuffer *buf;
     char *buffer = NULL;
     pid_t pid;
 
-    printf("\nArrive /post path\n");
+    log_write(INFO, "POST command cb\n");
+
     if (EVHTTP_REQ_POST != evhttp_request_get_command(req)) {
-        /*log it*/
+        log_write(WARN, "Not support this method.\n");
         evhttp_send_reply(req, 500, "not support this method", NULL);
-        printf("/post not support this method\n");
         return;
     }
-    printf("POST Request\n");
+    log_write(INFO, "POST Request.\n");
 
     buf = evhttp_request_get_input_buffer(req);
     size_t sz = evbuffer_get_length(buf);
 
     buffer = malloc(sz + 1);
     if (NULL == buffer) {
-        /*log it*/
+        log_write(ERROR, "alloc memory error.\n");
         evhttp_send_reply(req, 500, "alloc memroy error", NULL);
         return ;
     }
@@ -125,7 +122,7 @@ post_command_cb(struct evhttp_request *req, void *arg) {
 
     pid = fork();
     if (pid < 0) {
-        /*log it*/
+        log_write(ERROR, "fork process error.\n");
         evhttp_send_reply(req, 500, "fork process error", NULL);
         return;
     } else if (0 == pid) {
@@ -137,7 +134,7 @@ post_command_cb(struct evhttp_request *req, void *arg) {
         }
         if (execrc != 0) {
             /*TODO: if rc not equ 0, send sms*/
-            /*log it*/
+            log_write(ERROR, "exec request command.\n");
             return ;
         }
     } else {
@@ -149,6 +146,7 @@ post_command_cb(struct evhttp_request *req, void *arg) {
     buffer = NULL;
 
     /*log it*/
+    log_write(INFO, "reply 200 OK.\n");
     evhttp_send_reply(req, 200, "OK", NULL);
     return ;
 }
