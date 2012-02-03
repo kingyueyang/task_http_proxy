@@ -23,6 +23,8 @@
 #include "http-server.h"
 #include "log.h"
 
+extern FILE *log_fp;
+
 int task_http_proxy(void);
 
 int

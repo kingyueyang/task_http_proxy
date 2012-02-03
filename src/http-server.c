@@ -26,14 +26,6 @@ task_http_proxy(void) {
 
     unsigned short port = PORT;
 
-    int flag;
-    char *log_path = "/tmp";
-
-    flag = log_open(log_path);
-    if (flag) {
-        return -1;
-    }
-
     log_write(INFO, "http proxy initialize.\n");
 
     /* As you konw */

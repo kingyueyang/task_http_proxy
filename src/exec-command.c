@@ -25,14 +25,6 @@ shell_cmd (char *buf, int size) {
     char *path = NULL;
     pid_t pid;
 
-    int flag;
-    char *log_path = "/tmp";
-
-    flag = log_open(log_path);
-    if (flag) {
-        return -1;
-    }
-
     log_write(INFO, "exec request command.\n");
 
     path = strsep(&buf, ",");
