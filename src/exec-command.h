@@ -25,6 +25,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <sys/types.h>
+
 #include "log.h"
 
 int shell_cmd (char *buf, int size);

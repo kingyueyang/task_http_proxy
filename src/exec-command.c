@@ -23,6 +23,7 @@ int
 shell_cmd (char *buf, int size) {
     int rc;
     char *path = NULL;
+    pid_t pid;
 
     int flag;
     char *log_path = "/tmp";
@@ -42,9 +43,18 @@ shell_cmd (char *buf, int size) {
 
     char *env[] = {};
 
-    rc = execve(path, cmd , env);
-    log_write(DEBUG, "command return %d.\n", rc);
+    int child_st;
+    pid = fork();
+    if (pid < 0) {
 
-    return rc;
+    } else if (0 == pid) {
+        rc = execve(path, cmd , env);
+        log_write(DEBUG, "command return %d.\n", rc);
+    } else {
+        pid = waitpid(-1, &child_st, 0);
+        log_write(INFO, "child process exit code %d.\n", child_st);
+    }
+
+    return child_st;
 }		/* -----  end of function shell_cmd  ----- */
 

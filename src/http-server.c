@@ -117,33 +117,22 @@ post_command_cb(struct evhttp_request *req, void *arg) {
     int n;
     n = evbuffer_remove(buf, buffer, sz);
 
-    pid = fork();
-    if (pid < 0) {
-        log_write(ERROR, "fork process error.\n");
-        evhttp_send_reply(req, 500, "fork process error", NULL);
-        return;
-    } else if (0 == pid) {
-        /* Childen process*/
-        int execrc = shell_cmd(buffer, n);
-        if (buf != NULL) {
-            free(buf);
-            buf = NULL;
-        }
-        if (execrc != 0) {
-            /*TODO: if rc not equ 0, send sms*/
-            log_write(ERROR, "exec request command.\n");
-            return ;
-        }
+    /* NEED parser POST body and executed it */
+    int execrc = shell_cmd(buffer, n);
+    if (0 == execrc) {
+        free(buffer);
+        buffer = NULL;
+
+        log_write(INFO, "reply 200 OK.\n");
+        evhttp_send_reply(req, 200, "OK", NULL);
     } else {
-        /* Do nothing */
-        ;
+        free(buffer);
+        buffer = NULL;
+
+        log_write(INFO, "reply 401 ERR.\n");
+        evhttp_send_reply(req, 401, "ERR", NULL);
     }
 
-    free(buffer);
-    buffer = NULL;
-
-    log_write(INFO, "reply 200 OK.\n");
-    evhttp_send_reply(req, 200, "OK", NULL);
     return ;
 }
 

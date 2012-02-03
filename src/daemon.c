@@ -41,7 +41,6 @@ main ( int argc, char *argv[] )
     log_write(INFO, "Daemon has started.\n");
 
     log_write(INFO, "http proxy will be start.\n");
-/*TODO:fork*/
     task_http_proxy();
 
     log_close();
