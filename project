@@ -1,5 +1,6 @@
 
-task_http_proxy=/home/yueyang/Workspace/fetion_interface/src/sub_projects/task_http_proxy CD=. filter="*.c *.h *.sh *.py" {
+task_http_proxy=/home/yueyang/Workspace/fetion_interface/src/sub_projects/task_http_proxy CD=. filter="*.c *.h *.sh *.py Makefile" {
+ Makefile
  bin=bin {
  }
  conf=conf {
