@@ -115,20 +115,11 @@ post_command_cb(struct evhttp_request *req, void *arg) {
 
     /* NEED parser POST body and executed it */
     int execrc = shell_cmd(buffer);
-    if (0 == execrc) {
-        free(buffer);
-        buffer = NULL;
+    log_write(INFO, "http-server: reply 200 OK. %d\n", execrc);
+    evhttp_send_reply(req, 200, "OK", NULL);
 
-        log_write(INFO, "http-server: reply 200 OK.\n");
-        evhttp_send_reply(req, 200, "OK", NULL);
-    } else {
-        log_write(INFO, "http-server: reply 401 ERR. commad: %s\n", buffer);
-        /*TODO:send SMS*/
-        evhttp_send_reply(req, 401, "ERROR", NULL);
-
-        free(buffer);
-        buffer = NULL;
-    }
+    free(buffer);
+    buffer = NULL;
 
     return ;
 }

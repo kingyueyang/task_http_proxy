@@ -42,8 +42,13 @@ if __name__ == '__main__':
         os.system("mkdir /tmp/test")
 
     post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp1.py')
-    time.sleep(2)
-    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp2.py')
-    time.sleep(2)
+    time.sleep(1)
     post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp.py')
+    time.sleep(1)
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp2.py')
+    time.sleep(1)
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp2.py')
+    time.sleep(1)
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp.py')
+    post('10.10.140.146:8888', '/usr/bin/python,python,/tmp/test_sp2.py')
 

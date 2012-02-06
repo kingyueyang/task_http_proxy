@@ -15,6 +15,6 @@ import random
 import time
 
 file = random.randint(1,65535)
-time.sleep(20)
+time.sleep(10)
 os.system("touch /tmp/test/%s" % file)
 

@@ -28,6 +28,7 @@
 
 #include <sys/stat.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
