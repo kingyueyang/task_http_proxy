@@ -1,0 +1,25 @@
+
+task_http_proxy=/home/yueyang/Workspace/fetion_interface/src/sub_projects/task_http_proxy CD=. filter="*.c *.h *.sh *.py" {
+ bin=bin {
+ }
+ conf=conf {
+ }
+ src=src {
+  daemon.c
+  ev_queue.c
+  exec-command.c
+  http-server.c
+  log.c
+  ev_queue.h
+  exec-command.h
+  http-server.h
+  log.h
+ }
+ test=test {
+  loop_test.sh
+  remote_test.sh
+  test_post.py
+  test_sp1.py
+  test_sp2.py
+ }
+}
