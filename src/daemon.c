@@ -37,12 +37,12 @@ main ( int argc, char *argv[] )
     if (flag) {
         return -1;
     }
-    log_write(INFO, "Daemon will be start.\n");
 
-    int drc = daemon(0, 0);
-    log_write(INFO, "Daemon has started.\n");
+    /* Call daemon function */
+    daemon(0, 0);
+    log_write(INFO, "daemon: Daemon has started.\n");
 
-    log_write(INFO, "http proxy will be start.\n");
+    log_write(INFO, "daemon: http proxy will be start.\n");
     task_http_proxy();
 
     log_close();

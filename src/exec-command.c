@@ -20,30 +20,31 @@
 #include "exec-command.h"
 
 int
-shell_cmd (char *buf, int size) {
-    int rc;
-    char *path = NULL;
+shell_cmd (char *buf) {
     pid_t pid;
-
-    log_write(INFO, "exec request command.\n");
-
-    path = strsep(&buf, ",");
-
-    char *cmd[3] = {"", "", (char *)0};
-    cmd[0] = strsep(&buf, ",");
-    cmd[1] = strsep(&buf, ",");
-
-    char *env[] = {};
-
     int child_st;
+
     pid = fork();
     if (pid < 0) {
-
+        log_write(ERROR, "exec-command: fork process error.\n");
     } else if (0 == pid) {
-        rc = execve(path, cmd , env);
+        char *path = NULL;
+        log_write(INFO, "exec-command: child process (%d) parser command: %s\n", getpid(), buf);
+
+        path = strsep(&buf, ",");
+        char *cmd[3] = {"", "", (char *)0};
+        cmd[0] = strsep(&buf, ",");
+        cmd[1] = strsep(&buf, ",");
+        char *env[] = {};
+
+        execve(path, cmd , env);
     } else {
         pid = waitpid(-1, &child_st, 0);
-        log_write(INFO, "child process exit code %d.\n", child_st);
+        if (0 == child_st) {
+            log_write(INFO, "exec-command: child process (%d) exit code %d.\n", pid, child_st);
+        } else {
+            log_write(ERROR, "exec-command: child process (%d) exit code %d.\n", pid, child_st);
+        }
     }
 
     return child_st;

@@ -26,7 +26,7 @@ task_http_proxy(void) {
 
     unsigned short port = PORT;
 
-    log_write(INFO, "http proxy initialize.\n");
+    log_write(INFO, "http-server: http proxy initialize.\n");
 
     /* As you konw */
     if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
@@ -35,14 +35,14 @@ task_http_proxy(void) {
     /* Create a new base evObject */
     base = event_base_new();
     if (!base) {
-        log_write(ERROR, "Couldn't create an event_base: exiting\n");
+        log_write(ERROR, "http-server: Couldn't create an event_base: exiting\n");
         return 1;
     }
 
     /* Create a new evhttp object to handle requests. */
     http = evhttp_new(base);
     if (!http) {
-        log_write(ERROR, "Couldn't create evhttp. Exiting.\n");
+        log_write(ERROR, "http-server: Couldn't create evhttp. Exiting.\n");
         return 1;
     }
 
@@ -60,11 +60,11 @@ task_http_proxy(void) {
     handle = evhttp_bind_socket_with_handle(http, "0.0.0.0", port);
 
     if (!handle) {
-        log_write(ERROR, "Couldn't bind to port %d. Exiting.\n", (int)port);
+        log_write(ERROR, "http-server: Couldn't bind to port %d. Exiting.\n", (int)port);
         return 1;
     }
 
-    log_write(INFO, "http proxy initialized done.\n");
+    log_write(INFO, "http-server: http proxy initialized done.\n");
     event_base_dispatch(base);
 
     return EXIT_SUCCESS;
@@ -72,58 +72,62 @@ task_http_proxy(void) {
 
 static void
 other_cb(struct evhttp_request *req, void *arg) {
-    log_write(WARN, "Not Suppost this Path\n");
+    log_write(WARN, "http-server: Not Suppost this Path\n");
     evhttp_send_reply(req, 401, "olo", NULL);
     return;
 }
 
 static void
 post_command_cb(struct evhttp_request *req, void *arg) {
-    int flag;
-
+    size_t sz;
+    int buffer_sz;
     struct evbuffer *buf;
     char *buffer = NULL;
     pid_t pid;
 
-    log_write(INFO, "POST command cb\n");
+    log_write(INFO, "http-server: POST command cb\n");
 
     if (EVHTTP_REQ_POST != evhttp_request_get_command(req)) {
-        log_write(WARN, "Not support this method.\n");
+        log_write(WARN, "http-server: Not support this method.\n");
         evhttp_send_reply(req, 500, "not support this method", NULL);
         return;
     }
-    log_write(INFO, "POST Request.\n");
+    log_write(INFO, "http-server: POST Request.\n");
 
     buf = evhttp_request_get_input_buffer(req);
-    size_t sz = evbuffer_get_length(buf);
+    sz = evbuffer_get_length(buf);
 
     buffer = malloc(sz + 1);
     if (NULL == buffer) {
-        log_write(ERROR, "alloc memory error.\n");
+        log_write(ERROR, "http-server: alloc memory error.\n");
         evhttp_send_reply(req, 500, "alloc memroy error", NULL);
         return ;
     }
 
     /* Init temp buffer */
     memset(buffer, 0, sz + 1);
-    int n;
-    n = evbuffer_remove(buf, buffer, sz);
+    buffer_sz = evbuffer_remove(buf, buffer, sz);
+    if (sz != buffer_sz) {
+        log_write(ERROR, "http-server: post content error. sz: %ld, buffer_sz:%ld\n", sz, buffer_sz);
+        evhttp_send_reply(req, 501, "post content error", NULL);
+        return ;
+    }
 
     /* NEED parser POST body and executed it */
-    int execrc = shell_cmd(buffer, n);
+    int execrc = shell_cmd(buffer);
     if (0 == execrc) {
         free(buffer);
         buffer = NULL;
 
-        log_write(INFO, "reply 200 OK.\n");
+        log_write(INFO, "http-server: reply 200 OK.\n");
         evhttp_send_reply(req, 200, "OK", NULL);
     } else {
+        log_write(INFO, "http-server: reply 401 ERR. commad: %s\n", buffer);
+        /*TODO:send SMS*/
+        evhttp_send_reply(req, 401, "ERROR", NULL);
+
         free(buffer);
         buffer = NULL;
-
-/*TODO:send SMS*/
-        log_write(INFO, "reply 401 ERR.\n");
-        evhttp_send_reply(req, 401, "ERR", NULL);
     }
 
     return ;

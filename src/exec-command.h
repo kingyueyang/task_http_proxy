@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-int shell_cmd (char *buf, int size);
+int shell_cmd (char *buf);
 
 #endif
 
