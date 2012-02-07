@@ -129,11 +129,12 @@ post_command_cb(struct evhttp_request *req, void *arg) {
 
     return ;
 }
-static void sig_chld(int signo) {
+static void 
+sig_chld(int signo) {
     pid_t pid;
     int chldst;
     if (signal(SIGCHLD, sig_chld) == SIG_ERR)
-        return (1);
+        return ;
     pid = waitpid(-1, &chldst, WNOHANG);
 
     if (chldst != 0) {
