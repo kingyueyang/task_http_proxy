@@ -113,6 +113,9 @@ post_command_cb(struct evhttp_request *req, void *arg) {
     if (sz != buffer_sz) {
         log_write(ERROR, "http-server: post content error. sz: %ld, buffer_sz:%ld\n", sz, buffer_sz);
         evhttp_send_reply(req, 501, "post content error", NULL);
+        free(buffer);
+        buffer = NULL;
+
         return ;
     }
 
