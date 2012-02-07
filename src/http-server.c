@@ -32,6 +32,9 @@ task_http_proxy(void) {
     if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
         return (1);
 
+    if (signal(SIGCHLD, sig_chld) == SIG_ERR)
+        return (1);
+
     /* Create a new base evObject */
     base = event_base_new();
     if (!base) {
@@ -123,4 +126,18 @@ post_command_cb(struct evhttp_request *req, void *arg) {
 
     return ;
 }
+static void sig_chld(int signo) {
+    pid_t pid;
+    int chldst;
+    if (signal(SIGCHLD, sig_chld) == SIG_ERR)
+        return (1);
+    pid = waitpid(-1, &chldst, WNOHANG);
 
+    if (chldst != 0) {
+        log_write(ERROR, "child process terminated error, pid: %d\n", pid);
+    } else {
+        log_write(INFO, "child process normal terminated, pid: %d\n", pid);
+    }
+
+    return ;
+}

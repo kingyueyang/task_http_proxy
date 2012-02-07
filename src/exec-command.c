@@ -39,12 +39,15 @@ shell_cmd (char *buf) {
 
         execve(path, cmd , env);
     } else {
+#if 0
+        /* Block recover child process. */
         pid = waitpid(-1, &child_st, 0);
         if (0 == child_st) {
             log_write(INFO, "exec-command: child process (%d) exit code %d.\n", pid, child_st);
         } else {
             log_write(ERROR, "exec-command: child process (%d) exit code %d.\n", pid, child_st);
         }
+#endif
     }
 
     return child_st;

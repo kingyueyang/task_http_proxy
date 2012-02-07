@@ -53,6 +53,7 @@
 static void other_cb(struct evhttp_request *req, void *arg);
 static void post_command_cb(struct evhttp_request *req, void *arg);
 static int gen_data(char **r_data);
+static void sig_chld(int signo);
 
 #endif
 
