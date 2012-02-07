@@ -37,6 +37,7 @@ shell_cmd (char *buf) {
         cmd[1] = strsep(&buf, ",");
         char *env[] = {};
 
+        free(buf);
         execve(path, cmd , env);
     } else {
 #if 0
