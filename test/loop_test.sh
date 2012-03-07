@@ -4,7 +4,7 @@ while true
 do
   {
     python test_post.py
-    sleep 360
+    sleep 15
   }
 done
 

@@ -121,8 +121,13 @@ post_command_cb(struct evhttp_request *req, void *arg) {
 
     /* NEED parser POST body and executed it */
     int execrc = shell_cmd(buffer);
-    log_write(INFO, "http-server: reply 200 OK. %d\n", execrc);
-    evhttp_send_reply(req, 200, "OK", NULL);
+    if (0 == execrc) {
+        log_write(INFO, "http-server: reply 200 OK. %d\n", execrc);
+        evhttp_send_reply(req, 200, "OK", NULL);
+    } else {
+        log_write(ERROR, "fork error. %d\n", execrc);
+        evhttp_send_reply(req, 502, "ERR", NULL);
+    }
 
     free(buffer);
     buffer = NULL;
@@ -135,12 +140,15 @@ sig_chld(int signo) {
     int chldst;
     if (signal(SIGCHLD, sig_chld) == SIG_ERR)
         return ;
-    pid = waitpid(-1, &chldst, WNOHANG);
+    while (pid = waitpid(-1, &chldst, WNOHANG) > 0) {
+        log_write(INFO, "in loop, pid: %d\n", pid);
+        ;
+    }
 
     if (chldst != 0) {
-        log_write(ERROR, "child process terminated error, pid: %d\n", pid);
+        log_write(ERROR, "child process terminated error, pid: %d, status: %d\n", pid, chldst);
     } else {
-        log_write(INFO, "child process normal terminated, pid: %d\n", pid);
+        log_write(INFO, "child process normal terminated, pid: %d, status: %d\n", pid, chldst);
     }
 
     return ;

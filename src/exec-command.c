@@ -22,11 +22,11 @@
 int
 shell_cmd (char *buf) {
     pid_t pid;
-    int child_st;
 
     pid = fork();
     if (pid < 0) {
         log_write(ERROR, "exec-command: fork process error.\n");
+        return -1;
     } else if (0 == pid) {
         char *path = NULL;
         log_write(INFO, "exec-command: child process (%d) parser command: %s\n", getpid(), buf);
@@ -37,7 +37,6 @@ shell_cmd (char *buf) {
         cmd[1] = strsep(&buf, ",");
         char *env[] = {};
 
-        free(buf);
         execve(path, cmd , env);
     } else {
 #if 0
@@ -51,6 +50,6 @@ shell_cmd (char *buf) {
 #endif
     }
 
-    return child_st;
+    return 0;
 }		/* -----  end of function shell_cmd  ----- */
 
